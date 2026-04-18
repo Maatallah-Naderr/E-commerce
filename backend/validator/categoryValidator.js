@@ -5,7 +5,7 @@ const categoryValidator=[
     body('slug').notEmpty().withMessage('slug is required'),
     body('description').optional(),
     body('isActive').isBoolean().withMessage("isActive must be a boolean value "),
-    body('image').optional().custom((value, { req }) => {
+    body('image').custom((value, { req }) => {
       if (!req.file) {
          return true;
       }

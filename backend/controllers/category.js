@@ -4,16 +4,17 @@ const mongoose = require('mongoose');
 ///////create a  new category
 
 const createCategory = async(req, res)=>{
-    const {name , description , slug , isActive , image } = req.body;
+    const {name , description , slug , isActive  } = req.body;
 
     try{
       const existingCategory = await Category.findOne({name});
       if(existingCategory){
         return res.status(400).json({ message : 'category already existing '})
       }
+      const imagePath = req.file ? req.file.path : null;
       const category = await Category.create({
     
-        name , description , slug , isActive , image 
+        name , description , slug , isActive , imagePath 
       })  
       return res.status(201).json({
         sucess: true ,
@@ -59,13 +60,13 @@ const getOneCategory = async(req, res)=>{
 const deleteCategory = async(req, res)=>{
   const {id}= req.params;
   try{
-const category = await Category.findByIdANdUpdate(id , {isActive : false }, {new : true});
+const category = await Category.findByIdAndUpdate(id , {isActive : false }, {new : true});
 if(!category){
-  return res.json({success : false , message : "category ot found"})
+  return res.status(404).json({success : false , message : "category ot found"})
 }
 return res.status(200).json({sucess : true , message : 'category desactived with sucess'})
   }catch(error){
-    return res.status(500).json({ success : false ,message : error.message})
+    return res.status(500).json({ success : true ,message : error.message})
   }
 }
 

@@ -12,12 +12,14 @@ const routerOrder= require('./routers/order.router')
  app.use(morgan('combined'));
  app.use(express.json());
  app.use(express.urlencoded({extended : true }))
+
 ////// app server
 /// connect to server
 dBconnect();
 app.use("/api/auth" , authRouter)
 app.use('/api/product', routerProduct)
 app.use('/api/category', routerCategory)
+ app.use("/uploads", express.static("uploads"));
 app.use('/api/cart', routerCart)
 app.use('/api/order', routerOrder)
 app.get("/",(req ,res)=>{
