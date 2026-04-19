@@ -1,6 +1,7 @@
 const Category = require("../models/category")
 const mongoose = require('mongoose');
-
+const path = require('path');
+const fs = require("fs")
 ///////create a  new category
 
 const createCategory = async(req, res)=>{
@@ -66,11 +67,47 @@ if(!category){
 }
 return res.status(200).json({sucess : true , message : 'category desactived with sucess'})
   }catch(error){
-    return res.status(500).json({ success : true ,message : error.message})
+    return res.status(500).json({ success : false ,message : error.message})
+  }
+}
+const updateCategory = async(req, res)=>{
+  try{
+    const {id}= req.params;
+    const {name,description, slug, isActive }= req.body;
+    const category = await Category.findById(id);
+    if(!category){
+      return res.status(404).json({success: false , message:"category not found "})
+    }
+    if(req.file){
+      if(category.image){
+        const oldImagePath = path.join(__dirname,"..",category.image)
+        if (fs.existsSync(oldImagePath)) {
+      fs.unlinkSync(oldImagePath); // 🔥 sync = plus simple ici
+    }
+        
+      }
+      category.image=req.file.path;
+    }
+    if(name) category.name= name;
+    if(description)category.description=description;
+    if(slug)category.slug= slug;
+    if(isActive !== undefined) category.isActive=isActive
+     const updatedCategory = await category.save()
+    return res.status(200)
+    .json({
+      success: true,
+      message : "category updated with success",
+      data : updatedCategory
+
+
+    })
+
+  }catch(error){
+    return res.status(500).json({ success : false,message : error.message})
   }
 }
 
-module.exports = {createCategory,getAllCategory, getOneCategory ,deleteCategory}
+module.exports = {createCategory,getAllCategory, getOneCategory ,deleteCategory, updateCategory}
 
 
 

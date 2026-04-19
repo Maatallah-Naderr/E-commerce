@@ -22,4 +22,9 @@ const categoryValidator=[
       return true;
     })
 ]
-module.exports = {categoryValidator}
+const updateCategoryValidator=[
+  body('name').optional(),
+  body('description').optional(),
+  body('isActive').optional().isBoolean()
+]
+module.exports = {categoryValidator,updateCategoryValidator}
