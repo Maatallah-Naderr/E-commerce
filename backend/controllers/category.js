@@ -34,7 +34,7 @@ const getAllCategory= async(req, res)=>{
     try{
         const categories = await Category.find({isActive : true });
         return res.status(200).json({
-            sucess : false , 
+            success : true, 
             data : categories
         })
 

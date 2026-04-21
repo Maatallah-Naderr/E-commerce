@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const morgan= require('morgan');
+const cors = require('cors')
 const dBconnect = require("./config/dBconnect");
 const authRouter = require("./routers/auth.router")
 const routerProduct  = require('./routers/product.router')
@@ -12,7 +13,7 @@ const routerOrder= require('./routers/order.router')
  app.use(morgan('combined'));
  app.use(express.json());
  app.use(express.urlencoded({extended : true }))
-
+app.use(cors());
 ////// app server
 /// connect to server
 dBconnect();
