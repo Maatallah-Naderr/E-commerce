@@ -15,10 +15,10 @@ const createCategory = async(req, res)=>{
       const imagePath = req.file ? req.file.path : null;
       const category = await Category.create({
     
-        name , description , slug , isActive , imagePath 
+        name , description , slug , isActive , image:imagePath 
       })  
       return res.status(201).json({
-        sucess: true ,
+        success: true ,
         message:'category created with success',
         data : category 
       }) 

@@ -1,6 +1,6 @@
 const express = require('express');
 const routerProduct= express.Router();
-const {createProduct,updateProduct, getAllProduct, getOneProduct, deleteProduct}=require('../controllers/product.controller')
+const {createProduct,updateProduct, getAllProduct, getOneProduct, deleteProduct,getProductByCategory}=require('../controllers/product.controller')
 const {productValidator}= require("../validator/productValidator")
 const {isAdmin} = require('../middlewars/auth.middlewear')
 const {productValidate}= require('../middlewars/product.middlwear')
@@ -12,4 +12,5 @@ routerProduct.delete('/delete/:id', protect,isAdmin,deleteProduct)
 /////router user
 routerProduct.get('/all', getAllProduct);
 routerProduct.get('/oneProduct/:id', getOneProduct)
+routerProduct.get('/byCategory/:id',getProductByCategory)
 module.exports = routerProduct ;
