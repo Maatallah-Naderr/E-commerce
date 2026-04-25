@@ -25,6 +25,10 @@ const mongoose = require('mongoose');
         required :true
 
     },
+    image:{
+      type:String,
+      require: true,
+    } ,
  }, {timestamps : true })
 
  module.exports = mongoose.model("Product" , productSchema)

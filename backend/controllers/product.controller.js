@@ -1,7 +1,9 @@
 const Product = require("../models/product");
 const Category = require("../models/category");
+const path = require('path')
+const fs = require("fs");
 const createProduct = async (req, res) => {
-  const { name, description, stock, category, price } = req.body;
+  const { name, description, stock, category, price} = req.body;
   if (!name || !stock || !price) {
     return res.status(400).json({
       success: false,
@@ -17,12 +19,18 @@ const createProduct = async (req, res) => {
         message: "this category not exist ",
       });
     }
+    const productExist = await Product.findOne({name, category})
+    if(productExist){
+      return res.status(404).json({message :'product already exist in this category '})
+    }
+    const imagePath = req.file ? req.file.path : null;
     const product = await Product.create({
       name,
       description,
       stock,
       category,
       price,
+      image : imagePath,
     });
     return res.status(201).json({
       success: true,
@@ -84,7 +92,7 @@ const getOneProduct = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: product });
   } catch (error) {
-    return res.status(500).json({ sucess: false, massage: error.message });
+    return res.status(500).json({ success: false, massage: error.message });
   }
 };
 const deleteProduct = async (req, res) => {
@@ -110,12 +118,12 @@ const getProductByCategory = async(req,res)=>{
     try{
     const {id}= req.params;
     const products = await Product.find({category: id});
-    console.log(products)
+  
     return res.status(200).json({
         success :true,
         data: products,
     })
-console.log("ID",id)
+
     }catch(error){
        return res.status(500).json({ success: false, massage: error.message });  
     }
