@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/api";
 import "../index.css";
-
+import CartProduct from "../components/CartProduct";
 export default function Home() {
   const [category, setCategory] = useState([]);
   const [products, setProducts] = useState([]);
@@ -51,17 +51,7 @@ export default function Home() {
         )}
 
         {products.map((product) => (
-          <div className="product-card" key={product._id}>
-            <img
-              src={`http://localhost:5000/${product.image}`}
-              alt={product.name}
-            />
-            <div className="product-info">
-              <h3>{product.name}</h3>
-              <p>{product.price} DT</p>
-            </div>
-            <div className="btn-add">Add To Cart</div>
-          </div>
+         <CartProduct product={product} key={product._id}/>
         ))}
       </div>
     </>

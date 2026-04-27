@@ -1,5 +1,6 @@
 
 import './App.css'
+import CartProvider from './Context/CartContext'
 import AppRoutes from './routes/AppRoutes'
 
 
@@ -8,8 +9,10 @@ function App() {
 
   return (
     <>
-     
-   <AppRoutes/>
+     <CartProvider>
+      <AppRoutes/>
+     </CartProvider>
+   
     
     </>
  

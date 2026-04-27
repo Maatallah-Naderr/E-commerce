@@ -1,6 +1,9 @@
 
-import {Link} from "react-router-dom"
+import {Link} from "react-router-dom";
+import { CartContext } from "../../Context/CartContext";
+import { useContext } from "react";
 export default function Navbar() {
+const {cartCount}= useContext(CartContext)
   return (
 <nav className="navbar">
     <h2>My Shop</h2>
@@ -13,7 +16,7 @@ export default function Navbar() {
 
 <div className="nav-right">
     <Link to="/cart" className="cart-icon" >
-    🛒 <span className="badge"> 0</span>
+    🛒 <span className="badge"> {cartCount}</span>
 
     </Link>
 
