@@ -3,7 +3,7 @@ const API = `http://localhost:5000/api/cart`;
 
 export async function addToCartAPI(productId ,token){
     const res = await axios.post(
-        `${API}/addtoCart`,
+        `${API}/addToCart`,
         {
             productId,
             quantity:1

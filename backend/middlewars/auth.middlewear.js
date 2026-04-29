@@ -26,10 +26,12 @@ const protect = async (req, res, next) => {
   }
   try{
       const decoded = jwt.verify(token , process.env.SECRET);
+      console.log("decoded",decoded)
   
   req.user = await User.findById(decoded.id).select("-password")
   next()
   }catch(error){
+     console.log("JWT ERROR:", error.message);
 res.status(401).json({success : false , message : "token invalid "})
   }
 

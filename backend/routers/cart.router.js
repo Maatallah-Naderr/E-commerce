@@ -4,7 +4,7 @@ const {addToCart, getCartUser, removeItem} = require('../controllers/cart.contro
 const {isAdmin, validate, protect} = require("../middlewars/auth.middlewear")
 
 
-cartRouter.post('/addToCart' ,protect,addToCart);
+cartRouter.post('/addToCart',protect,addToCart);
 cartRouter.get('/getCart', protect, getCartUser);
 cartRouter.delete('/removeItem',protect ,removeItem)
 

@@ -7,6 +7,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [selectCategoryId, setSelectCategoryId] = useState(null);
   useEffect(function () {
+   
     async function fetechCategory() {
       try {
         const res = await API.get("category/all");
