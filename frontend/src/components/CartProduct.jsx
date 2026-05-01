@@ -2,17 +2,9 @@ import { useContext } from "react";
 import { CartContext } from "../Context/CartContext";
 import { addToCartAPI } from "../api/cartService";
 export default function CartProduct({ product }) {
-  const { cartCount, setCartCount } = useContext(CartContext);
-  async function handleAdd() {
-    try {
-      const token = localStorage.getItem("token");
-      
-      addToCartAPI(product._id, token);
-      setCartCount((cur) => cur + 1);
-      console.log("token", token);
-    } catch (error) {
-      console.log(error.response?.data || error.message);
-    }
+  const { cartCount, addToCart} = useContext(CartContext);
+   function handleAdd() {
+   addToCart(product)
   }
   return (
     <div className="product-card" key={product._id}>

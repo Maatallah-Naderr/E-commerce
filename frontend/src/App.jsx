@@ -1,5 +1,6 @@
 
 import './App.css'
+import AuthProvider from './Context/AuthContext'
 import CartProvider from './Context/CartContext'
 import AppRoutes from './routes/AppRoutes'
 
@@ -9,9 +10,12 @@ function App() {
 
   return (
     <>
-     <CartProvider>
+    <AuthProvider>
+      <CartProvider>
       <AppRoutes/>
      </CartProvider>
+    </AuthProvider>
+     
    
     
     </>
