@@ -25,7 +25,7 @@ const addToCart = async (req, res) => {
     }
     let cartItem = await CartItem.findOne({
       cart: cart._id,
-      product: productId,
+      product: product._id,
     });
     if (cartItem) {
       cartItem.quantity += quantity;
@@ -35,6 +35,8 @@ const addToCart = async (req, res) => {
         cart: cart._id,
         product: productId,
         quantity: quantity,
+        price:product.price,
+        total: product.price*quantity
       });
     }
 
@@ -60,8 +62,14 @@ const getCartUser = async (req, res) => {
         },
       });
     }
-    const cartItems = await CartItem.find({ cart: cart._id }).populate(
+    const cartItems= await CartItem.find({ cart: cart._id }).populate(
       "product",
+    );
+    let total =0;
+    cartItems.forEach((item) =>{
+      total += item.price *item.quantity
+    }
+     
     );
     return res.status(200).json({
       success: true,
@@ -69,6 +77,7 @@ const getCartUser = async (req, res) => {
         id: cart._id,
         user: cart.user,
         items: cartItems,
+        totalPrice : total
       },
     });
   } catch (error) {
@@ -102,4 +111,56 @@ const removeItem = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-module.exports = { addToCart, getCartUser, removeItem };
+
+
+const incriseQuantity = async(req, res)=>{
+  try{
+    const userId = req.user._id; 
+    const productId =req.params.productId;
+    const cart = await Cart.findOne({user:userId});
+    if(!cart) res.status(404).json({message :"cart not found "});
+   const item = await CartItem.findOne({cart:cart._id, product : productId});
+   if(!item){
+    return res.status(404).json({message : "product not found"})
+   }
+   item.quantity +=1;
+   item.total = item.quantity * item.price
+    
+    await item.save();
+
+return res.status(200).json({data : item})
+  }catch(error){
+    return res.status(500).json({message : error.message})
+  }
+}
+const decriseQuantity =async (req, res)=>{
+
+  try{
+    const userId = req.user._id;
+    const productId = req.params.productId;
+    const cart = await Cart.findOne({user:userId});
+    if(!cart) res.status(404).json({message :"cart not found "});
+   const item = await CartItem.findOne({cart: cart._id, product : productId})
+   if(!item){
+    res.status(404).json({message : "product not found"})
+
+   }
+   item.quantity -=1;
+   if(item.quantity <=0){
+    await item.deleteOne()
+   }else{
+    item.total = item.quantity *item.price
+    await item.save()
+   }
+return res.status(200).json({suceess : true ,data :item})
+
+  }catch(error){
+    return res.status(500).json({message : error.message})
+}  
+
+}
+
+
+
+
+module.exports = { addToCart, getCartUser, removeItem, incriseQuantity , decriseQuantity };

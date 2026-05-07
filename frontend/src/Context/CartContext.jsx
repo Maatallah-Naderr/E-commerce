@@ -1,35 +1,68 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
+import {getCart, addToCartAPI,decriseAPI, incriseAPI} from"../api/cartService"
 export const CartContext = createContext();
 
 export default function CartProvider({ children }) {
   
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState(null);
+  const[cartItems ,setCartItems]=useState([])
   const {token}= useAuth();
-  function addToCart(product) {
+  async function fetchCart(){
+    try{
+      const data = await getCart();
+      console.log(data)
+    setCart(data.cart);
+    }catch(error){
+      console.log("error to fetching cart", error.message)
+
+    }
+    
+  }
+  useEffect(()=>{
+    if(token)
+    fetchCart();
+  },[token])
+
+
+
+
+
+
+  async function addToCart(productId ) {
   if(!token){
     alert("please login first ");
     return;
   }
-    setCartItems((prev) => {
-      const existing = prev.find((p) => p._id === product._id);
-      if (existing) {
-        return prev.map((item) =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        );
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    }
+  try{
+    await addToCartAPI(productId);
+    fetchCart();
 
-  );
-   
+
+  }catch(error){
+    console.log(error.message)
+
   }
-   const cartCount = cartItems.reduce((total , item)=> total +item.quantity,0)
-   const totalPrice= cartItems.reduce((total, item)=>total+item.price *item.quantity , 0)
+  
+   }
+
+   const totalCount = cart?.items?.reduce((total,item)=>{
+    return total+item.quantity},0)||0 ;
+   
+   const totalPrice = cart?.totalPrice;
+   async function decrise(id){
+    await decriseAPI(id);
+    fetchCart()
+   }
+    async function incrise(id){
+    await incriseAPI(id)
+    fetchCart()
+   }
+  
+
+   const value={addToCart , fetchCart, incrise, decrise,cartItems:cart?.items||[], totalCount,totalPrice}
   return (
-    <CartContext.Provider value={{ cartItems, addToCart ,cartCount , totalPrice}}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

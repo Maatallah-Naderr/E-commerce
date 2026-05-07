@@ -1,27 +1,28 @@
 
 import useCart from "../hooks/useCart"
 export default function Cart() {
-  const {cartItems , cartCount , totalPrice}=useCart()
+  const {cartItems , totalCount , totalPrice ,incrise , decrise, handleRemove}=useCart()
 
 console.log(totalPrice)
+
   return (
    <>
     <div className="cart-container">
       
       <div className="cart-info">
-        <h2> cart :{cartCount}</h2>
+        <h2> cart :{totalCount}</h2>
         {
           cartItems.length === 0?(<p>Your cart is empty</p>):(
             cartItems.map(item=>(
              <div className="cart-item" key={item._id}>
-              <h3>{item.name}</h3>
+              <h3>{item.product.name}</h3>
               <p>quantity:{item.quantity}</p>
               <p>price: {item.price}</p>
               <div className="cart-action">
-                <button>-</button>
+                <button onClick={()=>decrise(item.product._id)}>-</button>
                 <span>{item.quantity}</span>
-                <button>+</button>
-                <span className="btn-remove">🗑️</span>
+                <button onClick={()=>incrise(item.product._id)}>+</button>
+                <span className="btn-remove" onClick={()=>handleRemove(item._id)}>🗑️</span>
 
               </div>
               

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import API from "../api/api"
+import API from "../api/api";
 import "../index.css";
 import CartProduct from "../components/CartProduct";
 export default function Home() {
@@ -7,13 +7,10 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [selectCategoryId, setSelectCategoryId] = useState(null);
   useEffect(function () {
-   
     async function fetechCategory() {
       try {
         const res = await API.get("category/all");
         setCategory(res.data.data);
-
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -30,7 +27,6 @@ export default function Home() {
 
   return (
     <>
-    
       <h2>categories</h2>
       <div className="category-container">
         {category.map((cat) => (
@@ -52,7 +48,7 @@ export default function Home() {
         )}
 
         {products.map((product) => (
-         <CartProduct product={product} key={product._id}/>
+          <CartProduct product={product} key={product._id} />
         ))}
       </div>
     </>

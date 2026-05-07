@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { useContext } from "react";
 export default function Navbar() {
-const {cartCount}= useContext(CartContext)
+const {totalCount}= useContext(CartContext)
   return (
 <nav className="navbar">
     <h2>My Shop</h2>
@@ -17,7 +17,7 @@ const {cartCount}= useContext(CartContext)
 
 <div className="nav-right">
     <Link to="/cart" className="cart-icon" >
-    🛒 <span className="badge"> {cartCount}</span>
+    🛒 <span className="badge"> {totalCount}</span>
 
     </Link>
 
