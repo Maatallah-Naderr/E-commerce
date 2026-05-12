@@ -17,7 +17,7 @@ console.log(totalPrice)
              <div className="cart-item" key={item._id}>
               <h3>{item.product.name}</h3>
               <p>quantity:{item.quantity}</p>
-              <p>price: {item.price}</p>
+              <p>price: {item.product.price}</p>
               <div className="cart-action">
                 <button onClick={()=>decrise(item.product._id)}>-</button>
                 <span>{item.quantity}</span>
