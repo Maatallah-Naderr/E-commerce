@@ -16,7 +16,7 @@ export async function getCart(){
     const {data}= await API.get("/cart/getCart");
     return data ;
 }
-export async function removeCart(productId) {
+export async function removeCart(id) {
     const {data} = await API.delete(`/cart/removeItem/${id}`)
     return data;
     
@@ -28,4 +28,7 @@ export const incriseAPI = async(id)=>{
 export const decriseAPI = async(id )=>{
     return API.patch(`/cart/decrise/${id}`)
    
+}
+export const removeAPI = async(id)=>{
+    return API.delete(`/cart/removeItem/${id}`)
 }

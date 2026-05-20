@@ -6,7 +6,7 @@ const {isAdmin, validate, protect} = require("../middlewars/auth.middlewear")
 
 cartRouter.post('/addToCart',protect,addToCart);
 cartRouter.get('/getCart', protect, getCartUser);
-cartRouter.delete('/removeItem/:productId',protect ,removeItem)
+cartRouter.delete('/removeItem/:productId',protect,removeItem)
 cartRouter.patch('/incrise/:productId',protect,incriseQuantity)
 cartRouter.patch('/decrise/:productId',protect,decriseQuantity)
 

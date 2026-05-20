@@ -88,7 +88,7 @@ const getCartUser = async (req, res) => {
 const removeItem = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { productId } = req.body;
+    const { productId } = req.params;
     const cart = await Cart.findOne({ user: userId });
     if (!cart) {
       return  res.status(404).json({

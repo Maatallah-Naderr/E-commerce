@@ -1,20 +1,23 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 
 import loginAPI from "../api/loginAPI";
 import {useNavigate} from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+const {loginUser} = useContext(AuthContext)
 const handleLogin= async(e)=>{
   e.preventDefault();
   try{
     const data = await loginAPI(email,password)
     console.log(data);
     localStorage.setItem("token", data.data.token)
+    loginUser(data.token , data.user)
+    
    setEmail("");
     setPassword("");
    navigate("/");
