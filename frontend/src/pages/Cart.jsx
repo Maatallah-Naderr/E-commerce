@@ -22,7 +22,7 @@ console.log(totalPrice)
                 <button onClick={()=>decrise(item.product._id)}>-</button>
                 <span>{item.quantity}</span>
                 <button onClick={()=>incrise(item.product._id)}>+</button>
-                <span className="btn-remove" onClick={()=>handleRemove(item._id)}>🗑️</span>
+                <span className="btn-remove" onClick={()=>handleRemove(item.product._id)}>🗑️</span>
 
               </div>
               

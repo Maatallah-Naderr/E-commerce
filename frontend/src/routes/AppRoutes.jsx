@@ -6,6 +6,7 @@ import MainLayout from "../components/Layouts/MainLayout"
 import Cart from "../pages/Cart";
 import Login from "../pages/Login"
 import Register from "../pages/Registre"
+import Categories from "../pages/Categories";
 
 export default function appRoutes() {
 
@@ -17,6 +18,7 @@ export default function appRoutes() {
     <Route path="/cart" element={<Cart/>}/>
     <Route path="/login" element={<Login/>}/>
     <Route path = "/register"element ={<Register/>}/>
+    <Route path="/Categories" element ={<Categories/>}      />
 </Route>
     
 </Routes>
