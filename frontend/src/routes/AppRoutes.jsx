@@ -7,6 +7,7 @@ import Cart from "../pages/Cart";
 import Login from "../pages/Login"
 import Register from "../pages/Registre"
 import Categories from "../pages/Categories";
+import CategoriesProduct from "../pages/CategoriesProduct";
 
 export default function appRoutes() {
 
@@ -19,6 +20,7 @@ export default function appRoutes() {
     <Route path="/login" element={<Login/>}/>
     <Route path = "/register"element ={<Register/>}/>
     <Route path="/Categories" element ={<Categories/>}      />
+    <Route path="/Categories/:id"  element={<CategoriesProduct/>}                                   />
 </Route>
     
 </Routes>

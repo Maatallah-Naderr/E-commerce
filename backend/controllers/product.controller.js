@@ -75,7 +75,7 @@ const updateProduct = async (req, res) => {
 };
 const getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find().populate("category", "name");
+    const products = await Product.find({category:id}).populate("category", "name");
     return res.status(200).json({ success: true, data: products });
   } catch (error) {
     return res.status(500).json({ success: false, massage: error.message });

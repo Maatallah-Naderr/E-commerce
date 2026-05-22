@@ -2,10 +2,10 @@ import { useContext } from "react";
 import { CartContext } from "../Context/CartContext";
 
 
-export default function UseCar(){
+export default function useCart(){
     const context = useContext(CartContext)
     if(!context){
-        throw new Error("useAuth must be used inside Provider")
+        throw new Error("useCart must be used inside Provider")
     }
     return context
 }

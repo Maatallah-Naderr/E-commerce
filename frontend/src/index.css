@@ -122,6 +122,19 @@ cursor: pointer;
   color:white;
 
 }
+.btn-logout{
+  padding: 0px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ;
+background-color: #FFF1D3;
+font-size: 20px;
+
+}
+.btn-logout:hover{
+  transform: scale(1.1);
+}
 .nav-links{
   display :flex;
   gap:30px;
@@ -350,3 +363,49 @@ text-align: right;
   color :gray
 }
 
+/* css product */
+
+.container-product{
+ 
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ align-items:center;
+  
+}
+.grid-product{
+  width:250px;
+ height:auto;
+border : solid 1px #ddd;
+padding: 10px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+border-radius: 12px;
+transition: 0.3s
+
+
+}
+.grid-product:hover{
+  transform:translateY(-5px)
+}
+.grid-product img{
+  height:200px;
+  width:100%;
+  object-fit:cover;
+  border-radius:5px;
+
+}
+.info-product{
+ 
+  display:flex;
+  flex-direction:column ;
+  padding:20px;
+  align-items:center;
+  gap:10px;
+  margin-top:15px;
+  width:100%;
+
+}
+.info-product p{
+  color:gray;
+  font-weight:bold;
+}

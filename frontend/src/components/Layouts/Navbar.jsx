@@ -18,7 +18,7 @@ export default function Navbar() {
         </li>
         {isAuthenticated ? (
           <li>
-            <button onClick={logout}>
+            <button className="btn-logout" onClick={logout}>
               {" "}
               <NavLink to="/login">Logout</NavLink>
             </button>
