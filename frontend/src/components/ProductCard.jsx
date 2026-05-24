@@ -1,10 +1,11 @@
-import useCart from "../hooks/useCart"
-
-export default function ProductCard({product}) {
+import useCart from "../hooks/useCart";
+import {useNavigate} from "react-router-dom";
+export default function ProductCard({product ,onClick}) {
     const {addToCart}=useCart();
+    const navigate = useNavigate()
   return (
-    <div classeName="product-Cart">
-        <img src={`http://localhost:5000/${product.image}`} alt={product.name} />
+    <div classeName="product-Cart" >
+        <img src={`http://localhost:5000/${product.image}`} alt={product.name}  />
         <div className="product-info"  >
             <h3>name : {product.name}</h3>
             <p>

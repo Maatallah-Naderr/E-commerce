@@ -8,7 +8,7 @@ import Login from "../pages/Login"
 import Register from "../pages/Registre"
 import Categories from "../pages/Categories";
 import CategoriesProduct from "../pages/CategoriesProduct";
-
+import ProductDetails from "../pages/ProductDetails"
 export default function appRoutes() {
 
   return (
@@ -20,7 +20,9 @@ export default function appRoutes() {
     <Route path="/login" element={<Login/>}/>
     <Route path = "/register"element ={<Register/>}/>
     <Route path="/Categories" element ={<Categories/>}      />
-    <Route path="/Categories/:id"  element={<CategoriesProduct/>}                                   />
+    <Route path="/Categories/:id"  element={<CategoriesProduct/>} />
+    <Route  path="/product/:id" element={<ProductDetails/>}                              />
+                                    
 </Route>
     
 </Routes>

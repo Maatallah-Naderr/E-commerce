@@ -2,11 +2,13 @@ import { productByCategory } from "../api/categoryProduct";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProductCart from "../components/CartProduct"
+import{useNavigate } from "react-router-dom"
 export default function CategoriesProduct() {
   const [products, setProducts] = useState([]);
   const [loading , setLoading]= useState(false);
   const [error, setError]= useState("")
   const { id } = useParams();
+  const navigate = useNavigate()
   async function getProductByCategory(categoryId){
     try{
         setLoading(true);
@@ -25,12 +27,14 @@ useEffect(()=>{
     getProductByCategory(id)
 },[id])
   return (
-    <div className="product-container">
+    <div className="product-container"  >
+    
+    
         {loading && <p> Loading please wait ... </p>}
         {error && <p>{error}</p>}
       {products.map(product=>(
         <div className ="grid-product">
-       <ProductCart key={product._id} product={product}/>
+       <ProductCart key={product._id} product={product} onClick={()=>navigate(`/product/${product._id}`)}/>
       </div>
       ))
      }

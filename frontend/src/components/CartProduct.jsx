@@ -1,12 +1,14 @@
 import useCart from "../hooks/useCart"
 
-export default function CartProduct({ product }) {
+export default function CartProduct({ product, onClick }) {
   const { addToCart} = useCart()
-   function handleAdd() {
+   function handleAdd(e) {
+   e.stopPropagation()
    addToCart(product._id)
   }
   return (
-    <div  key={product._id}>
+    <div  onClick={onClick} className="grid-product">
+
     
       <img src={`http://localhost:5000/${product.image}`} alt={product.name} />
       <div className="info-product" >

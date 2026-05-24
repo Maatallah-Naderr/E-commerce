@@ -15,7 +15,17 @@ useEffect(()=>{
   if(savedToken){
     setToken(savedToken)
   }
-if(savedUser) setUser(JSON.parse(savedUser))
+  try{if(savedUser && savedUser !=="") {
+    setUser(JSON.parse(savedUser))
+
+  }
+    
+
+}catch(error){
+    console.log("error went passed user", error)
+    localStorage.removeItem("user")
+}
+
   setLoading(false);
 },[])
 
