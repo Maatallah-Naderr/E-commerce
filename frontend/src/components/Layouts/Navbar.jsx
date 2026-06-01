@@ -5,7 +5,9 @@ import { AuthContext } from "../../Context/AuthContext";
 import { useContext } from "react";
 export default function Navbar() {
   const { totalCount } = useContext(CartContext);
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout,user } = useContext(AuthContext);
+  console.log(user)
+  console.log(isAuthenticated)
   return (
     <nav className="navbar">
       <h2>My Shop</h2>
@@ -22,6 +24,7 @@ export default function Navbar() {
               {" "}
               <NavLink to="/login">Logout</NavLink>
             </button>
+            {user?.role ==="admin"&& <NavLink to= "/dashboard"> Dashboard</NavLink>}
           </li>
         ) : (
           <li>

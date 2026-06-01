@@ -8,6 +8,13 @@ export default function Home() {
   const [selectCategoryId, setSelectCategoryId] = useState(null);
   const [search, setSearch] = useState("");
   const [selectOption , setSelectOption]= useState("")
+  const [currentPage , setCurrentPage]= useState(1)
+const productPerPage = 2;
+const lastProductIndex = currentPage * productPerPage ;
+const firstProducutIndex = lastProductIndex -productPerPage;
+
+
+
   const filtredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(search.toLowerCase()),
   );
@@ -21,11 +28,14 @@ export default function Home() {
   if(selectOption ==="a to z"){
     sortedProducts.sort((a,b)=>a.name.localeCompare(b.name))
   }
+  const  currentProducts = sortedProducts.slice(firstProducutIndex ,lastProductIndex)
+  const totalPages= Math.ceil(sortedProducts.length/productPerPage);
   useEffect(function () {
     async function fetechCategory() {
       try {
         const res = await API.get("category/all");
         setCategory(res.data.data);
+        setCurrentPage(1)
       } catch (error) {
         console.log(error);
       }
@@ -38,6 +48,7 @@ export default function Home() {
     );
     setProducts(res.data.data);
     setSelectCategoryId(id);
+    setCurrentPage(1)
   }
 
   return (
@@ -80,13 +91,21 @@ export default function Home() {
           <p>No products in this category </p>
         )}
 
-        {sortedProducts.map((product) => (
+        {currentProducts.map((product) => (
           <CartProduct
             product={product}
             key={product._id}
            
           />
         ))}
+        <div className="pagination">
+          {
+            [...Array(totalPages)].map((_,index)=>
+            <button key = {index}  onClick={()=>setCurrentPage(index+1)}   >{index+1}</button>
+            
+            )
+          }
+        </div>
       </div>
     </>
   );

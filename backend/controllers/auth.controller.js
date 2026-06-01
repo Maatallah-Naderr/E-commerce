@@ -64,12 +64,13 @@ const loginUser= async(req , res)=>{
     .json({
         success : true,
         message : "login with success",
-        data:{
+        token : token,
+        user:{
             id : user._id ,
             name:user.name,
             email: user.email, 
             role : user.role, 
-            token
+            
         }
     })
 

@@ -510,3 +510,60 @@ transition: 0.3s ;
   font-size: 16px;
   background-color: white;
 }
+
+/* ///////////////////////////////////////////class pagination  */
+.pagination{
+  width: 10%;
+  height: 30px;
+  
+  display: flex;
+  justify-content: center;
+  gap:10px;
+  margin: 30px 0;
+}
+.pagination button{
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+
+
+}
+.pagination button:hover{
+background: black;
+color: white;
+}
+
+/* /////////////////////css dashboard */
+.dashboard-container{
+  display: flex;
+  min-height: 100vh;
+
+}
+.aside-container{
+  display: flex;
+  flex-direction: column;
+  border: solid 1px;
+  border-radius: 5px;
+  gap:30px;
+  padding : 20px;
+}
+
+.aside-container a {
+  text-decoration: none;
+  color: black;
+  
+}
+.dashboard-content{
+  flex:1;
+  padding :20px
+}
+ .aside-container a.active{
+background-color:#333;
+color :white ;
+font-size: 20px;
+padding :10px;
+border-radius: 8px;
+}
+

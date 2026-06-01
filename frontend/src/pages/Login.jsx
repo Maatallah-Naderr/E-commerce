@@ -14,9 +14,8 @@ const handleLogin= async(e)=>{
   e.preventDefault();
   try{
     const data = await loginAPI(email,password)
-    console.log(data);
-    localStorage.setItem("token", data.data.token)
-    loginUser(data.data.token , data.user)
+  loginUser(data.token, data.user)
+  
     
    setEmail("");
     setPassword("");
