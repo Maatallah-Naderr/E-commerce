@@ -567,3 +567,83 @@ padding :10px;
 border-radius: 8px;
 }
 
+/* ////////////////////////////////////////css adminCategory */
+
+.card-container{
+  
+  width: calc(25% - 20px);
+  padding: 10px;
+background-color: #fff;
+border-radius: 12px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+transition: 0.2s ease ,box-shadow 0.2s ease;
+ cursor: pointer; 
+}
+.card-container:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-container img{
+
+height: 180px;
+width: 200px;
+object-fit: cover;
+display: block;
+}
+.admin-container-category{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.info-cat-admin{
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  gap: 6px;
+}
+.btn{
+  display: flex;
+  justify-content: space-between;
+}
+.btn button{
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  transition: 0.2s;
+}
+.btn button:hover{
+  background-color: #c3e6cb;
+}
+h3{
+  text-align: center;
+
+}
+.form-category{
+  border:solid 1px white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 70%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap:20px
+}
+.form-category input ,textarea{
+  width: 50%;
+  padding: 10px 20px;
+  border: transparent;
+  border-radius: 12px;
+  
+}
+.form-category button{
+  width: 50%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
