@@ -2,7 +2,7 @@ const {body}= require("express-validator");
 
 const categoryValidator=[
     body("name").notEmpty().withMessage("name is required"),
-    body('slug').notEmpty().withMessage('slug is required'),
+    // body('slug').notEmpty().withMessage('slug is required'),
     body('description').optional(),
     body('isActive').isBoolean().withMessage("isActive must be a boolean value "),
     body('image').custom((value, { req }) => {

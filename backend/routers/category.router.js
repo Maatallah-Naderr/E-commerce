@@ -6,6 +6,7 @@ const {
   getAllCategory,
   getOneCategory,
   updateCategory,
+  deleteCategory
 } = require("../controllers/category");
 const { isAdmin, validate, protect } = require("../middlewars/auth.middlewear");
 const {
@@ -34,5 +35,6 @@ routerCategory.put(
   validate,
   updateCategory,
 );
+routerCategory.delete("/delete/:id",protect,isAdmin, validate, deleteCategory)
 
 module.exports = routerCategory;

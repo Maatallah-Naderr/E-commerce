@@ -85,6 +85,7 @@ res.status(401).json({success : false , message : "token invalid "})
 
 const isAdmin =(req, res, next)=>{
     if( req.user?.role ==="admin"){
+  
         next()
     }else
         return res.status(403).json({success :false , message : "only admin "})

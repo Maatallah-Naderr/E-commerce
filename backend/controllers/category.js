@@ -2,10 +2,12 @@ const Category = require("../models/category")
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require("fs")
+const slugify =require('slugify')
 ///////create a  new category
 
 const createCategory = async(req, res)=>{
-    const {name , description , slug , isActive  } = req.body;
+    const {name , description ,  isActive  } = req.body;
+    const slug = slugify(name ,{lower:true, strict: true})
 
     try{
       const existingCategory = await Category.findOne({name});
@@ -73,7 +75,7 @@ return res.status(200).json({sucess : true , message : 'category desactived with
 const updateCategory = async(req, res)=>{
   try{
     const {id}= req.params;
-    const {name,description, slug, isActive }= req.body;
+    const {name,description, isActive }= req.body;
     const category = await Category.findById(id);
     if(!category){
       return res.status(404).json({success: false , message:"category not found "})
@@ -88,7 +90,12 @@ const updateCategory = async(req, res)=>{
       }
       category.image=req.file.path;
     }
-    if(name) category.name= name;
+    if(name !==undefined) {
+      category.name= name;
+      category.slug= slugify(name)
+
+
+    }
     if(description)category.description=description;
     if(slug)category.slug= slug;
     if(isActive !== undefined) category.isActive=isActive

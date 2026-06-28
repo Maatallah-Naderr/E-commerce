@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
-import { getAllCategory } from "../api/categoryService";
+import {
+  getAllCategory,
+  addCategory,
+  deleteCategory,
+  updateCategory,
+} from "../api/categoryService";
 export default function CategoriesAdmin() {
   const [categories, setCategories] = useState([]);
-  const[name , setName]=useState("");
-  const[description , setDescription]= useState("")
-  const [image , setImage ]= useState("")
-  const [isActive, setIsActive]= useState(true)
-
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [isActive, setIsActive] = useState(true);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [categoryEdit, setCategoryEdit] = useState(null);
   useEffect(() => {
     async function fetechCategories() {
       try {
@@ -21,84 +28,130 @@ export default function CategoriesAdmin() {
     fetechCategories();
   }, []);
 
-useEffect(()=>{
+  async function handleSumbit(e) {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+    if (!name.trim() || !description.trim() ) {
+      setMessage("all fields are required");
+      setLoading(false);
+      return;
+    }
 
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("image", image);
+    formData.append("isActive", isActive);
+    try {
+      setLoading(true);
+      if (categoryEdit) {
+        const res = await updateCategory(categoryEdit._id, formData);
+        setCategories((prev) =>
+          prev.map((category) =>
+            category._id === res.data._id ? res.data : category,
+          ),
+        );
+      } else {
+        const res = await addCategory(formData);
+        setCategories((prev) => [...prev, res.data]);
+        console.log(res.data);
+        setMessage("category added with success");
+        setName("");
+        setDescription("");
+        setImage(null);
+      }
+    } catch (error) {
+      setMessage(error.message || "wornong connexion ");
+    } finally {
+      setLoading(false);
+    }
+  }
 
-
-},[])
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("are you sure to delete category!!");
+    if (!confirmDelete) return;
+    try {
+      await deleteCategory(id);
+      setCategories((prev) => prev.filter((p) => p._id !== id));
+      setMessage("category delete with success");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "error to delete message");
+    }
+  };
+  const handleEdit = (category) => {
+    setCategoryEdit(category);
+    setName(category.name ?? "");
+    setDescription(category.description ?? "");
+    setIsActive(category.isActive ?? true);
+    setImage(null);
+  };
 
   return (
-<>
-<div className="form-category" >
-<input type="text" required="true" placeholder="name of category" value={name} oncahnge={(e)=>setName(e.target.value)} />
-<textarea placeholder="description" value={description} onChange={(e)=>setDescription(e.target.value)}/>
-<input type="file"  value={image}   onChange={(e)=>setImage(e.target.files[0])} />
-<label>
-  <input
-  type="checkbox"
-  value={isActive}
-  onChange={(e)=>setIsActive(e.target.checked)}
-  />
-  Active
-</label>
-<button>Add category</button>
+    <>
+      <h3>Categories </h3>
+      {message && <p>{message} </p>}
+      <form className="form-category" onSubmit={handleSumbit}>
+        <input
+          type="text"
+          required
+          placeholder="name of category"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <textarea
+          placeholder="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        <label>
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={(e) => setIsActive(e.target.checked)}
+          />
+          Active
+        </label>
+        <button type="submit" disabled={loading}>
+          {loading ? "Sending in progress" : "Add Category"}
+        </button>
+      </form>
 
-</div>
-
-
-    <h3>Categories </h3>
-    <div className="admin-container-category">
-      
-      
+      <div className="admin-container-category">
         {categories.map((category) => (
           <Card
             categories={categories}
             category={category}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
             key={category._id}
           />
         ))}
-     
-    </div>
+      </div>
     </>
   );
 }
 
-function Card({ category }) {
+function Card({ category, handleDelete, handleEdit }) {
   return (
     <>
-    <div className="card-container">
-      
-       
-          <img src={`http://localhost:5000/${category.image}`} alt={category.name}   />
-       
+      <div className="card-container">
+        <img
+          src={`http://localhost:5000/${category.image}`}
+          alt={category.name}
+        />
+
         <div className="info-cat-admin">
           <h3> {category.name}</h3>
-         
-          <p>
-            {category.description?.slice(0 , 20)}
-          </p>
-         
+
+          <p>{category.description?.slice(0, 20)}</p>
         </div>
         <div className="btn">
-            <button >Delete</button>
-      <button >Update</button>
+          <button onClick={() => handleDelete(category._id)}>Delete</button>
+          <button onClick={() => handleEdit(category)}>Update</button>
         </div>
-    
-    </div>
-    
+      </div>
     </>
   );
 }
