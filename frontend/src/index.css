@@ -628,7 +628,7 @@ h3{
   padding: 10px;
   border-radius: 10px;
   width: 70%;
-  height: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   gap:20px;
@@ -647,7 +647,27 @@ h3{
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  margin :10px
 }
 .form-category button:hover{
   background-color: #c3e6cb;
+}
+.btn-action-category{
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+}
+.btn-cancel{
+
+  width: 90%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin :10px;
+  
+}
+.btn-cancel:hover{
+  background :red;
 }

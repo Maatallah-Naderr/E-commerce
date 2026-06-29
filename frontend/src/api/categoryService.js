@@ -17,6 +17,6 @@ export const deleteCategory= async(id)=>{
     return data 
 }
 export const updateCategory = async(id, formData)=>{
-    const {data}= await API.put(`/category/updateCategory/${id}`,formData)
+    const {data}= await API.put(`/category/update/${id}`,formData)
     return data ;
 }

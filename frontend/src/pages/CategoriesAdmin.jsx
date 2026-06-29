@@ -37,21 +37,36 @@ export default function CategoriesAdmin() {
       setLoading(false);
       return;
     }
-
+if(!categoryEdit && !image){
+  setMessage("image is required ");
+  setLoading(false);
+  return ;
+}
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("image", image);
+    
     formData.append("isActive", isActive);
+    if(image){
+      formData.append("image", image);
+    }
     try {
-      setLoading(true);
+     
       if (categoryEdit) {
         const res = await updateCategory(categoryEdit._id, formData);
+        setTimeout(()=>{
+          setMessage("category updated with success")
+        },2000)
         setCategories((prev) =>
           prev.map((category) =>
             category._id === res.data._id ? res.data : category,
           ),
         );
+        setCategoryEdit(null);
+        setName("");
+        setDescription("");
+        setImage(null)
+        setIsActive(true)
       } else {
         const res = await addCategory(formData);
         setCategories((prev) => [...prev, res.data]);
@@ -60,9 +75,11 @@ export default function CategoriesAdmin() {
         setName("");
         setDescription("");
         setImage(null);
+        setIsActive(true)
       }
     } catch (error) {
-      setMessage(error.message || "wornong connexion ");
+      setMessage(error.response?.data?.message || "somthing went wrong");
+      console.log(error.response.data)
     } finally {
       setLoading(false);
     }
@@ -86,6 +103,12 @@ export default function CategoriesAdmin() {
     setIsActive(category.isActive ?? true);
     setImage(null);
   };
+  const handleReset = ()=>{
+    setName("");
+    setDescription("");
+    setImage(null);
+    setIsActive(true)
+  }
 
   return (
     <>
@@ -113,9 +136,12 @@ export default function CategoriesAdmin() {
           />
           Active
         </label>
+        <div className="btn-action-category">
         <button type="submit" disabled={loading}>
-          {loading ? "Sending in progress" : "Add Category"}
+          {loading ? "Sending in progress" : categoryEdit? "Update Category" : "Add Category"}
         </button>
+        <button className="btn-cancel"  onClick={handleReset}   >Cancel</button>
+        </div>
       </form>
 
       <div className="admin-container-category">

@@ -96,8 +96,8 @@ const updateCategory = async(req, res)=>{
 
 
     }
-    if(description)category.description=description;
-    if(slug)category.slug= slug;
+    if(description !==undefined)category.description=description;
+   
     if(isActive !== undefined) category.isActive=isActive
      const updatedCategory = await category.save()
     return res.status(200)
