@@ -634,11 +634,12 @@ h3{
   gap:20px;
   margin-bottom: 20px;
 }
-.form-category input ,textarea{
+.form-category input ,textarea {
   width: 50%;
   padding: 10px 20px;
   border: transparent;
   border-radius: 12px;
+  margin: 10px;
   
 }
 .form-category button{
@@ -670,4 +671,45 @@ align-items: center;
 }
 .btn-cancel:hover{
   background :red;
+}
+.list-product{
+
+  padding: 10px;
+  border-radius: 10px;
+  width: 95%;
+
+  display: flex;
+flex-wrap: wrap;
+align-items: stretch;
+justify-content: center;
+  gap:20px;
+  margin-bottom: 20px;
+}
+.product-item{
+  width: calc(25% - 20px);
+  padding: 10px;
+background-color: #fff;
+border-radius: 12px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+transition: 0.2s ease ,box-shadow 0.2s ease;
+ cursor: pointer;
+  
+
+}
+.product-item:hover{
+  transform: scale(1.02);
+}
+.product-item img{
+    width: 90%;
+  height: 150px;
+border-radius: 10px;
+object-fit: cover;
+
+}
+form select{
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: transparent;
+  margin-bottom: 10px;
 }

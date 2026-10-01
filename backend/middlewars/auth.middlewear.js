@@ -13,6 +13,7 @@ const validate = (req, res, next) => {
 };
 
 const protect = async (req, res, next) => {
+ 
   let token;
   if (
     req.headers.authorization &&
@@ -84,6 +85,7 @@ res.status(401).json({success : false , message : "token invalid "})
 
 
 const isAdmin =(req, res, next)=>{
+
     if( req.user?.role ==="admin"){
   
         next()

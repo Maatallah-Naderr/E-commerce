@@ -3,6 +3,9 @@ const Category = require("../models/category");
 const path = require('path')
 const fs = require("fs");
 const createProduct = async (req, res) => {
+  console.log("CREATE PRODUCT HIT");
+    console.log("BODY :", req.body);
+    console.log("FILE :", req.file)
   const { name, description, stock, category, price} = req.body;
   if (!name || !stock || !price) {
     return res.status(400).json({
@@ -75,10 +78,10 @@ const updateProduct = async (req, res) => {
 };
 const getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find({category:id}).populate("category", "name");
+    const products = await Product.find({}).populate("category", "name");
     return res.status(200).json({ success: true, data: products });
   } catch (error) {
-    return res.status(500).json({ success: false, massage: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 const getOneProduct = async (req, res) => {

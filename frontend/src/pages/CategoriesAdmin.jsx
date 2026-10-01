@@ -18,7 +18,7 @@ export default function CategoriesAdmin() {
     async function fetechCategories() {
       try {
         const data = await getAllCategory();
-        console.log(data);
+        
         setCategories(data.data);
       } catch (error) {
         console.log(error.response?.data.message);
@@ -27,6 +27,13 @@ export default function CategoriesAdmin() {
 
     fetechCategories();
   }, []);
+  function resetForm(){
+ setCategoryEdit(null);
+        setName("");
+        setDescription("");
+        setImage(null)
+        setIsActive(true)
+  }
 
   async function handleSumbit(e) {
     e.preventDefault();
@@ -54,28 +61,26 @@ if(!categoryEdit && !image){
      
       if (categoryEdit) {
         const res = await updateCategory(categoryEdit._id, formData);
+         setMessage("category updated with success")
         setTimeout(()=>{
-          setMessage("category updated with success")
+         setMessage("")
         },2000)
         setCategories((prev) =>
           prev.map((category) =>
             category._id === res.data._id ? res.data : category,
           ),
         );
-        setCategoryEdit(null);
-        setName("");
-        setDescription("");
-        setImage(null)
-        setIsActive(true)
+        resetForm();
+       
       } else {
         const res = await addCategory(formData);
         setCategories((prev) => [...prev, res.data]);
         console.log(res.data);
         setMessage("category added with success");
-        setName("");
-        setDescription("");
-        setImage(null);
-        setIsActive(true)
+        setTimeout(()=>{
+          setMessage("")
+        },2000)
+       resetForm();
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "somthing went wrong");
@@ -104,10 +109,7 @@ if(!categoryEdit && !image){
     setImage(null);
   };
   const handleReset = ()=>{
-    setName("");
-    setDescription("");
-    setImage(null);
-    setIsActive(true)
+    resetForm()
   }
 
   return (
