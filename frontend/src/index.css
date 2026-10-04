@@ -713,3 +713,16 @@ form select{
   border: transparent;
   margin-bottom: 10px;
 }
+.product-action {
+  margin-top: 10px;
+}
+.product-action button {
+   width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: transparent;
+  margin-bottom: 10px;
+}
+.product-action button:hover{
+  background-color: #2ecc71;
+}

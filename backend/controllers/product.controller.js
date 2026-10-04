@@ -48,8 +48,10 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
+  console.log("🔥 UPDATE PRODUCT CONTROLLER");
   const { id } = req.params;
   const { name, description, stock, category, price } = req.body;
+ 
   try {
     if (category) {
       const categoryExist = await Category.findById(category);
@@ -63,8 +65,10 @@ const updateProduct = async (req, res) => {
     const product = await Product.findByIdAndUpdate(
       id,
       { name, description, stock, category, price },
-      { new: true, runValidator: true },
+      { new: true, runValidators: true },
+      
     );
+     console.log("PRODUCT UPDATED :", product)
     return res
       .status(200)
       .json({

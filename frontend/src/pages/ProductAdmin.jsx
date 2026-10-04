@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminSideBar from "../components/admin/AdminSideBar";
-import { getAllProducts, createProduct } from "../api/serviceProduct";
+import { getAllProducts, createProduct, updateProduct ,deleteProduct} from "../api/serviceProduct";
 import { getAllCategory } from "../api/categoryService";
 export default function ProductAdmin() {
   const [products, setProducts] = useState([]);
@@ -21,12 +21,13 @@ export default function ProductAdmin() {
     setPrice("");
     setStock("");
     setImage(null);
-    setMessage("");
+  
+    setCategory(""); 
   };
   const fetchProducts = async () => {
     try {
       const res = await getAllProducts();
-      console.log("res is ", res);
+
       setProducts(res.data);
     } catch (error) {
       setMessage(
@@ -37,7 +38,7 @@ export default function ProductAdmin() {
   const fetchCategories = async () => {
     try {
       const response = await getAllCategory();
-      console.log("response is :", response);
+      // console.log("response is :", response);
       setCategories(response.data);
     } catch (error) {
       setMessage(error.response?.data?.message);
@@ -51,30 +52,57 @@ export default function ProductAdmin() {
     e.preventDefault();
     try {
       setLoading(true);
-      setMessage("")
+      setMessage("");
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price);
       formData.append("stock", stock);
-      formData.append("image", image);
+     
       formData.append("category", category);
+      if(image){
+         formData.append("image", image);
+      }
       // for (const [key , value] of formData.entries()  ){
       //   console.log(key ,value)
       // }
-      const response = await createProduct(formData);
-      console.log("response product", response.data);
-      setMessage("product created with success");
+      const response = productEdit? await updateProduct(productEdit._id,formData) :await createProduct(formData);
+    
+      setMessage(productEdit?"product updated with success": "product created with success");
+      setTimeout(()=>{
+        setMessage("");
+    },3000)
+
+      
       handleReset();
+      setProductEdit(null)
+       await fetchProducts();
     } catch (error) {
-      console.log(error);
-      setMessage(error.response?.data?.message || "error creating product");
-      await fetchProducts();
+ 
+    
+      setMessage(error.response?.data?.message||(productEdit?"error updating product" : "error creating product ") );
+      
     } finally {
       setLoading(false);
     }
+   
   };
+const handleEdit=(product)=>{
+  
+  setProductEdit(product);
+  setName(product.name);
+  setDescription(product.description);
+  setPrice(product.price);
+  setStock(product.stock);
+  setCategory(product.category?._id|| "");
+  setImage(null);
 
+}
+const  handleDelete =async (id)=>{
+   console.log("🔥 DELETE ID :", id);
+   await deleteProduct(id);
+   fetchProducts()
+}
   return (
     <div>
       <main className="dashboard-content">
@@ -110,7 +138,7 @@ export default function ProductAdmin() {
             type="file"
             accept="image/*"
             onChange={(e) => {
-              console.log("image selectionné ", e.target.files[0]);
+              // console.log("image selectionné ", e.target.files[0]);
               setImage(e.target.files[0]);
             }}
           />
@@ -129,28 +157,36 @@ export default function ProductAdmin() {
             ))}
           </select>
 
-          <button type="submit">Add Product</button>
+          <button type="submit">{productEdit?"Update Product" : "Add Product"}</button>
         </form>
-           <h2>Products</h2>
+        <h2>Products</h2>
         <div className="list-product">
-          {loading&& <p>please wait a moment ...</p>}
-          {message&& <p>{message}</p>}
-       
+          {loading && <p>please wait a moment ...</p>}
+          {message && <p>{message}</p>}
+
           {products.map((product) => (
             <div key={product._id} className="product-item">
-                     <img
-                src={product.image
-      ? `http://localhost:5000/${product.image.replaceAll("\\", "/")}`
-      : "/default-product.png"}
+              <img
+                src={
+                  product.image
+                    ? `http://localhost:5000/${product.image.replaceAll("\\", "/")}`
+                    : "/default-product.png"
+                }
                 alt={product.name}
                 width="100"
               />
               <h3>Name :{product.name} </h3>
-       
+
               <p>Description:{product.description}</p>
               <p>Price :{product.price}</p>
               <p> Stock:{product.stock}</p>
               <p>Category:{product.category?.name}</p>
+              <div className="product-action">
+                <button onClick={() =>handleEdit(product) }>
+                  Edit product
+                </button>
+                <button onClick={()=>handleDelete(product._id)}>Delete </button>
+              </div>
             </div>
           ))}
         </div>

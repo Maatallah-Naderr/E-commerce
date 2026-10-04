@@ -13,3 +13,11 @@ export async function createProduct(formData){
     const {data} = await API.post("/product/add",formData)
    return data ;
 }
+export async function updateProduct(id , formData){
+    const {data}= await API.patch(`/product/update/${id}`, formData)
+    return data;
+}
+export async function deleteProduct(id){
+    const {data}= await API.delete(`/product/delete/${id}`);
+    return data
+}
