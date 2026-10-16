@@ -8,5 +8,7 @@ const productValidate = (req , res , next)=>{
       message: errors.array(),
     });
     }
+    console.log("Validation réussie");
+    next();
 }
 module.exports = {productValidate}

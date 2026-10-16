@@ -8,10 +8,20 @@ const {productValidate}= require('../middlewars/product.middlwear')
 const {validate,  protect} = require("../middlewars/auth.middlewear")
 ////router Admin 
 
-routerProduct.post('/add',protect,isAdmin,upload.single("image"),productValidate,validate,createProduct
+routerProduct.post('/add', 
+   protect, isAdmin, upload.single("image"), 
+  
+   productValidate, 
+  validate, createProduct
 )
 routerProduct.patch('/update/:id',protect,isAdmin,upload.single("image"),productValidator,validate, updateProduct)
-routerProduct.delete('/delete/:id', protect,isAdmin,deleteProduct)
+routerProduct.delete('/delete/:id', protect,(req, res , next)=>{
+  console.log("router passed protect ")
+  next();
+},isAdmin, protect,(req, res , next)=>{
+  console.log("router passed isAdmin ")
+  next();
+},deleteProduct)
 /////router user
 routerProduct.get('/all', getAllProduct);
 routerProduct.get('/oneProduct/:id', getOneProduct)

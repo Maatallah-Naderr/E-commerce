@@ -15,7 +15,7 @@ export default function CategoriesAdmin() {
   const [loading, setLoading] = useState(false);
   const [categoryEdit, setCategoryEdit] = useState(null);
   useEffect(() => {
-    async function fetechCategories() {
+    async function fetchCategories() {
       try {
         const data = await getAllCategory();
         
@@ -25,7 +25,7 @@ export default function CategoriesAdmin() {
       }
     }
 
-    fetechCategories();
+    fetchCategories();
   }, []);
   function resetForm(){
  setCategoryEdit(null);
@@ -35,7 +35,7 @@ export default function CategoriesAdmin() {
         setIsActive(true)
   }
 
-  async function handleSumbit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setMessage("");
@@ -111,12 +111,13 @@ if(!categoryEdit && !image){
   const handleReset = ()=>{
     resetForm()
   }
+  
 
   return (
     <>
       <h3>Categories </h3>
       {message && <p>{message} </p>}
-      <form className="form-category" onSubmit={handleSumbit}>
+      <form className="form-category" onSubmit={handleSubmit}>
         <input
           type="text"
           required

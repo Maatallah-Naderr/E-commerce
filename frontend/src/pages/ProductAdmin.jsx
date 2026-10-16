@@ -1,7 +1,12 @@
-import { useState, useEffect } from "react";
-import AdminSideBar from "../components/admin/AdminSideBar";
-import { getAllProducts, createProduct, updateProduct ,deleteProduct} from "../api/serviceProduct";
+import { useEffect, useState } from "react";
+import {
+  getAllProducts,
+  createProduct,
+  updateProduct,
+ deleteProduct
+} from "../api/serviceProduct";
 import { getAllCategory } from "../api/categoryService";
+
 export default function ProductAdmin() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -21,34 +26,38 @@ export default function ProductAdmin() {
     setPrice("");
     setStock("");
     setImage(null);
-  
-    setCategory(""); 
+    setCategory("");
   };
+
   const fetchProducts = async () => {
     try {
-      const res = await getAllProducts();
-
-      setProducts(res.data);
+      const response = await getAllProducts();
+      setProducts(response.data);
     } catch (error) {
+      console.log("error", error);
       setMessage(
-        error.response?.data?.message || "error when loading products",
+        error.response?.data?.message || "error when loading product ",
       );
     }
   };
   const fetchCategories = async () => {
     try {
-      const response = await getAllCategory();
-      // console.log("response is :", response);
-      setCategories(response.data);
+      const res = await getAllCategory();
+      console.log("setCategories", res.data);
+      setCategories(res.data);
     } catch (error) {
-      setMessage(error.response?.data?.message);
+      console.log(error);
+      setMessage(
+        error.response?.data?.message || "error when loading category ",
+      );
     }
   };
   useEffect(() => {
     fetchProducts();
     fetchCategories();
   }, []);
-  const handleSubmit = async (e) => {
+
+  async function handleSubmit(e) {
     e.preventDefault();
     try {
       setLoading(true);
@@ -58,139 +67,175 @@ export default function ProductAdmin() {
       formData.append("description", description);
       formData.append("price", price);
       formData.append("stock", stock);
-     
+      if (image) formData.append("image", image);
       formData.append("category", category);
-      if(image){
-         formData.append("image", image);
-      }
-      // for (const [key , value] of formData.entries()  ){
-      //   console.log(key ,value)
-      // }
-      const response = productEdit? await updateProduct(productEdit._id,formData) :await createProduct(formData);
-    
-      setMessage(productEdit?"product updated with success": "product created with success");
-      setTimeout(()=>{
-        setMessage("");
-    },3000)
+      console.log("form data pret");
+      const response = productEdit
+        ? await updateProduct(productEdit._id, formData)
+        : await createProduct(formData);
 
-      
+      console.log("response is ", response);
+      await fetchProducts();
       handleReset();
-      setProductEdit(null)
-       await fetchProducts();
+      setProductEdit(null);
+      setMessage(
+        productEdit
+          ? "product updated with succes "
+          : "product added with success",
+      );
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } catch (error) {
- 
-    
-      setMessage(error.response?.data?.message||(productEdit?"error updating product" : "error creating product ") );
-      
-    } finally {
-      setLoading(false);
+      console.log("error  ", error);
+      setMessage(error.response?.data?.message || "error when added product ");
+    }finally{
+      setLoading(false)
     }
-   
+  }
+  const handleEdit = (product) => {
+    setProductEdit(product);
+    setName(product.name);
+    setDescription(product.description);
+    setPrice(product.price);
+    setStock(product.stock);
+    setCategory(product.category?._id);
+    setImage(null);
   };
-const handleEdit=(product)=>{
-  
-  setProductEdit(product);
-  setName(product.name);
-  setDescription(product.description);
-  setPrice(product.price);
-  setStock(product.stock);
-  setCategory(product.category?._id|| "");
-  setImage(null);
+ const handleDelete = async(id)=>{
+  try{
+    await deleteProduct(id);
+    fetchProducts();
+    setMessage("product deleted with success");
+setTimeout(() => {
+  setMessage("");
+},3000);
 
-}
-const  handleDelete =async (id)=>{
-   console.log("🔥 DELETE ID :", id);
-   await deleteProduct(id);
-   fetchProducts()
-}
+  }catch(error){
+    console.log("error", error);
+    setMessage(error.response?.data?.message || "error when deleted product")
+  }
+ }
   return (
     <div>
-      <main className="dashboard-content">
-        <form className="product-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            required
-            placeholder="Enter Name of product"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <textarea
-            placeholder="description product "
-            required
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <input
-            type="number"
-            min="0"
-            placeholder="price of product"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-          <input
-            type="number"
-            min="0"
-            placeholder="Stock"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              // console.log("image selectionné ", e.target.files[0]);
-              setImage(e.target.files[0]);
-            }}
-          />
-          <select
-            value={category}
-            onChange={(e) => {
-              //  console.log("ID sélectionné :", e.target.value);
-              setCategory(e.target.value);
-            }}
-          >
-            <option value=""> select a category</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          required
+          placeholder="name of product"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <textarea
+          required
+          placeholder="description of product "
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <input
+          placeholder="Price of product"
+          required
+          type="number"
+          min={1}
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
 
-          <button type="submit">{productEdit?"Update Product" : "Add Product"}</button>
-        </form>
+        <input
+          type="number"
+          placeholder="stock of product"
+          min={0}
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+        />
+        <input
+          type="file"
+          placeholder="choose a image"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="">choose Category</option>
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+        <button type="submit" disabled={loading}>
+          { loading? "please wait...": productEdit ? "Update product" : "AddProduct "}
+        </button>
+      </form>
+      <section>
         <h2>Products</h2>
-        <div className="list-product">
-          {loading && <p>please wait a moment ...</p>}
-          {message && <p>{message}</p>}
-
+        <div className="product-container">
+          {loading && <p className="message">please wait operation progress....</p>}
+          {message && <p className="message">{message}</p>}
           {products.map((product) => (
-            <div key={product._id} className="product-item">
-              <img
-                src={
-                  product.image
-                    ? `http://localhost:5000/${product.image.replaceAll("\\", "/")}`
-                    : "/default-product.png"
-                }
-                alt={product.name}
-                width="100"
-              />
-              <h3>Name :{product.name} </h3>
-
-              <p>Description:{product.description}</p>
-              <p>Price :{product.price}</p>
-              <p> Stock:{product.stock}</p>
-              <p>Category:{product.category?.name}</p>
-              <div className="product-action">
-                <button onClick={() =>handleEdit(product) }>
-                  Edit product
-                </button>
-                <button onClick={()=>handleDelete(product._id)}>Delete </button>
-              </div>
-            </div>
+            <ProductList
+              product={product}
+              key={product._id}
+              handleEdit={handleEdit}
+              productEdit={productEdit}
+              handleReset={handleReset}
+              setProductEdit={setProductEdit}
+              onDelete={handleDelete}
+            />
           ))}
         </div>
-      </main>
+      </section>
+    </div>
+  );
+}
+
+function ProductList({
+  product,
+  handleEdit,
+  productEdit,
+  handleReset,
+  setProductEdit,onDelete
+}) {
+  return (
+    <div className="product-item">
+      <img
+        src={
+          product.image
+            ? `http://localhost:5000/${String(product.image.replaceAll("\\", "/"))}`
+            : "/default-image.png"
+        }
+        alt={product.name}
+        width="100"
+      />
+      <p>Name : {product.name}</p>
+      <p>description : {product.description}</p>
+      <p>Price : {product.price}</p>
+      <p>Stock : {product.stock}</p>
+      <p>Category : {product.category?.name} </p>
+      <div className="product-action">
+        {" "}
+        <button onClick={() => handleEdit(product)}>Update</button>
+      </div>
+      {productEdit && (
+        <button
+          className="btn-cancel"
+          onClick={() => {
+            handleReset();
+            setProductEdit(null);
+          }}
+        >
+          Cancel{" "}
+        </button>
+      )}
+      <button className="btn-cancel" 
+      onClick={()=>{
+        console.log("delete Ok")
+        if(confirm("are you sure to delete this product ?")){
+          onDelete(product._id);
+        }
+      }}
+      
+      >Delete</button>
     </div>
   );
 }

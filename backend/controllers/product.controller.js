@@ -103,12 +103,14 @@ const getOneProduct = async (req, res) => {
   }
 };
 const deleteProduct = async (req, res) => {
+  
   const { id } = req.params;
   try {
     const product = await Product.findByIdAndDelete(id).populate(
       "category",
       "name",
     );
+    
     if (!product) {
       return res
         .status(404)
@@ -118,6 +120,7 @@ const deleteProduct = async (req, res) => {
       .status(200)
       .json({ success: true, message: "product delete successfully" });
   } catch (error) {
+    console.error("Erreur suppression :", error);
     return res.status(500).json({ success: false, massage: error.message });
   }
 };

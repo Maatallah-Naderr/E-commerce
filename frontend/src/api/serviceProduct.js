@@ -10,7 +10,9 @@ export  async function getAllProducts(){
 
 }
 export async function createProduct(formData){
+    console.log("create product start")
     const {data} = await API.post("/product/add",formData)
+    console.log("create response product")
    return data ;
 }
 export async function updateProduct(id , formData){
