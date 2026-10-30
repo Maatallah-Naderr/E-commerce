@@ -12,6 +12,7 @@ import Dashboard from "../pages/Dashboard";
 import CategoriesAdmin from "../pages/CategoriesAdmin";
 import ProductAdmin from "../pages/ProductAdmin";
 import AdminLayout from "../components/admin/AdminLayout";
+import OrderAdmin from "../pages/OrderAdmin";
 export default function appRoutes() {
   return (
     <Routes>
@@ -33,7 +34,7 @@ export default function appRoutes() {
        <Route index element={<Dashboard/>}/>
        <Route path="categories" element={<CategoriesAdmin/>}/>
        <Route path="product" element={<ProductAdmin/>}/>
-
+       <Route  path="order" element={<OrderAdmin/>}  />
 
 
         </Route>

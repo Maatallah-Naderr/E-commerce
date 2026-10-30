@@ -114,11 +114,11 @@ const updateStatusOrder = async (req, res) => {
         .json({ success: false, message: "order not found " });
     }
     const validStatus = [
-      "pending ",
+      "pending",
       "paid",
       "shipped",
       "delivered",
-      "cancelled",
+    
     ];
     if (!validStatus.includes(status)) {
       return res.status(400).json({
@@ -126,7 +126,7 @@ const updateStatusOrder = async (req, res) => {
       });
     }
     order.status = status;
-    order.save();
+   await order.save();
     return res.status(200).json({
       message: "status order updated with success ",
       order,
@@ -185,4 +185,15 @@ const cancelledOrder = async (req, res) => {
     });
   }
 };
-module.exports = { confirmOrder, getMyOrders, getOneOrder, updateStatusOrder , cancelledOrder};
+const getAllOrders =async(req,res)=>{
+try{
+  const orders = await Order.find().populate("user","name email").populate("items.product", "name price");
+  res.status(200).json(orders)
+
+
+}catch(error){
+res.status(500).json({message: error.message})
+}
+ 
+}
+module.exports = { confirmOrder, getMyOrders, getOneOrder, updateStatusOrder , cancelledOrder ,getAllOrders};

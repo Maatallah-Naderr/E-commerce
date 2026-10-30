@@ -12,7 +12,7 @@ export default function AdminSideBar() {
         <NavLink to="/dashboard" end > Dashboard</NavLink>
       <NavLink to="/dashboard/categories"  > Categories</NavLink>
       <NavLink to="/dashboard/product"  > Products</NavLink>
-     
+     <NavLink  to="/dashboard/order"  >Orders</NavLink>
       
 </aside>
    

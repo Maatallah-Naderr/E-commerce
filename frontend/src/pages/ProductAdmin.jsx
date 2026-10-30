@@ -147,15 +147,17 @@ setTimeout(() => {
           min={0}
           value={stock}
           onChange={(e) => setStock(e.target.value)}
+          required
         />
         <input
           type="file"
           placeholder="choose a image"
           accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
+          required
         />
 
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select value={category} onChange={(e) => setCategory(e.target.value)} required>
           <option value="">choose Category</option>
           {categories.map((cat) => (
             <option key={cat._id} value={cat._id}>
