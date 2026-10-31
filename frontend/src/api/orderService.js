@@ -5,6 +5,6 @@ import API from "./api";
     return data;
 }
 export const updateOrder =async(id ,status)=>{
-    const {data}= await API.patch(`/order/updateStatusOrder/${id}/{status}`,{status})
+    const {data}= await API.patch(`/order/${id}/status`,{status})
     return data
 }
