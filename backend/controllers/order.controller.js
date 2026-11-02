@@ -162,13 +162,22 @@ const cancelledOrder = async (req, res) => {
       return res.status(400)
       .json({message:"order already cancelled "})
     }
-    for(item of order.items){
+    for(const item of order.items){
       const product = await Product.findById(item.product);
-      if(product){
+      if(!product){
+       return  res.status(404).json({
+          success:false ,
+          message:"product not found order cancellation aborted"
+        })
+      }
+
+
+
+
         product.stock+=item.quantity;
        await product.save()
 
-      }
+      
     }
    order.status="cancelled";
    await order.save();

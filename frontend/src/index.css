@@ -736,4 +736,39 @@ border-radius: 8px;
 background-color: #ccc;
 z-index: 1000;
 }
+.status-badge{
+  /* padding :5px 10px;
+  border-radius: 5px;
+  font-weight: bold; */
+    display: inline-block;
+  min-width: 85px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+}
+.paid{
+  background-color:#dbeafe;
+  color: green;
+
+}
+.pending{
+  background-color: orange;
+  color:white;
+}
+.shipped{
+  background-color: lightblue;
+  color: blue;
+}
+.delivered{
+  background-color: purple;
+  color:white;
+
+}
+.unknown {
+  background-color: #e2e8f0;
+  color: #334155;
+}
 

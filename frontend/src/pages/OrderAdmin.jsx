@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { getAllOrders, updateOrder } from "../api/orderService";
-import styles from "./cssModule/orderAdmin.module.css"
-
-export  default function OrderAdmin() {
+import styles from "./cssModule/orderAdmin.module.css";
+import BadgeStatus from "../components/BadgeStatus";
+export default function OrderAdmin() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  // const [updating , setUpdating]=useState(false);
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -21,13 +24,16 @@ export  default function OrderAdmin() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const handleUpdateStatus = async (id, status) => {
     try {
+      setUpdatingOrderId(id);
       setMessage("");
+      setMessageType("");
       console.log("is in handle update");
       const response = await updateOrder(id, status);
       console.log("update success in backend");
@@ -35,20 +41,39 @@ export  default function OrderAdmin() {
         prevOrders.map((order) => (order._id === id ? response.order : order)),
       );
       setMessage("status update with success");
+      setMessageType("success");
     } catch (error) {
       console.log("error is ", error);
       setMessage(error.response?.data?.message || "error when updating status");
+      setMessageType("error");
+    } finally {
+      setUpdatingOrderId(null);
     }
   };
 
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [message, messageType]);
   return (
-    <main className={styles.container} >
+    <main className={styles.container}>
       <h1 className="styles.title"> All Orders</h1>
       {loading && <p> please wait is loading ...</p>}
-      {message && <p> {message} </p>}
+      {message && (
+        <p className={`${styles.message} ${styles[messageType]}`}>
+          {" "}
+          {message}{" "}
+        </p>
+      )}
       <h3>Total orders is :{orders.length}</h3>
       {
-        <table className={styles.table} >
+        <table className={styles.table}>
           <thead>
             <tr>
               <th>Order Id</th>
@@ -66,7 +91,7 @@ export  default function OrderAdmin() {
                 <td>
                   {order.items.map((item) => (
                     <div key={item._id}>
-                      <p>{item.product?.name || "product not uvaible"}</p>
+                      <p>{item.product?.name || "product not unvaible"}</p>
                       <p>{item.quantity}</p>
                       {}
                     </div>
@@ -74,17 +99,25 @@ export  default function OrderAdmin() {
                 </td>
                 <td>{order.totalPrice}</td>
                 <td>
-                  <select
-                    value={order.status}
-                    onChange={(e) =>
-                      handleUpdateStatus(order._id, e.target.value)
-                    }
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="paid">Paid</option>
-                  </select>
+                  <div className={styles.statusWrapper}>
+                    <BadgeStatus status={order.status} />
+                    <select
+                      className={styles.statusSelect}
+                      value={order.status}
+                      onChange={(e) =>
+                        handleUpdateStatus(order._id, e.target.value)
+                      }
+                      disabled={updatingOrderId === order._id}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="paid">Paid</option>
+                    </select>
+                    {updatingOrderId === order._id && (
+                      <small className={styles.update}>updating...</small>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
